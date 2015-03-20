@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html><head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+        <meta charset="utf-8">
+        
+        <title>Doctor's Schedule | Doctor Now</title>
+        <meta name="description" content="Doctor Now">
+        <meta name="keywords" content="Doctor Now">
+        
+        <link href="Doctor%27s%20Schedule%20%7C%20Doctor%20Now_files/jquery-ui.css" rel="stylesheet" type="text/css">
+        <link href="Doctor%27s%20Schedule%20%7C%20Doctor%20Now_files/reset.css" rel="stylesheet" type="text/css">
+        <link href="Doctor%27s%20Schedule%20%7C%20Doctor%20Now_files/style.css" rel="stylesheet" type="text/css">
+        <link href="Doctor%27s%20Schedule%20%7C%20Doctor%20Now_files/font-awesome.css" rel="stylesheet" type="text/css">
+
+        <script> var SITE_URL = 'http://localhost/doctornow/website/'; </script>
+        <script type="text/javascript" src="Doctor%27s%20Schedule%20%7C%20Doctor%20Now_files/jquery-1.js"></script>
+        <script type="text/javascript" src="Doctor%27s%20Schedule%20%7C%20Doctor%20Now_files/jquery-ui.js"></script>
+        <script type="text/javascript" src="Doctor%27s%20Schedule%20%7C%20Doctor%20Now_files/base_javascript.js"></script>
+        
+        <script type="text/javascript" src="Doctor%27s%20Schedule%20%7C%20Doctor%20Now_files/moment.js"></script>
+<script type="text/javascript" src="Doctor%27s%20Schedule%20%7C%20Doctor%20Now_files/fullcalendar.js"></script>
+<script>
+    $(document).ready(function() {
+        
+        $( document ).tooltip({
+            position: {
+                my: "center bottom-20",
+                at: "center top",
+            },
+            show: {
+                effect: "slideDown",
+                delay: 250
+            },
+            content: function(callback) {
+                var date = $(this).data('date');
+                var current_element = $(this);
+
+                if (current_element.data('shifts') == '1')
+                {
+                    $.post(SITE_URL + 'shifts/get_shifts_by_date', 'date=' + date, function(response)
+                    {
+                        response = $.parseJSON(response);
+
+                        var str = '<div align="center">Shifts</div>';
+
+                        $.each(response, function(key, value)
+                        {
+                            str += '<div>' + value + '</div>';
+                        });
+                        callback( str );
+                    });
+                }
+                
+            }
+        });
+        var calendar = $('#calendar');
+        var today = $.fullCalendar.moment( calendar.fullCalendar( 'getDate' ) ).format('YYYY-MM-DD');
+        var available_shift_dates = ["2015-02-19","2015-01-22"];
+
+        calendar.fullCalendar({
+            header: {
+                left: '',
+                right: 'prev, title, next'
+            },
+            selectable: true,
+            timezone: 'UTC',
+            dayRender: function (date, cell) {
+                
+                var format_date = $.fullCalendar.moment( date );
+
+                if ($.inArray(format_date.format('YYYY-MM-DD'), available_shift_dates) > -1)
+                {
+                    $('.fc-day-number[data-date="' + format_date.format('YYYY-MM-DD') + '"]').attr('data-shifts', '1');
+                    $('.fc-day-number[data-date="' + format_date.format('YYYY-MM-DD') + '"]').attr('title', '');
+                    cell.html('<span class="icon_calendar"><i class="fa fa-clock-o"></i></span>');
+                }
+                else
+                {
+                    cell.attr('data-shifts', '0');
+                }
+
+                if (format_date.format('YYYY-MM-DD') < today)
+                {
+                    cell.css('background-color', '#E5E5E5');
+                }
+            },
+            //selectHelper: true,
+            select: function(start, end) {
+                var eventData = {
+                        id : 55,
+                        title: 'Sami',
+                        start: start,
+                        end: end
+                    };
+
+                //calendar.fullCalendar('renderEvent', eventData, true);
+                //calendar.fullCalendar('unselect')
+            },
+            //editable: true,
+            eventLimit: true, // allow "more" link when too many events
+            slotDuration:'00:10:00',
+            events: [{"id":"2","title":"Booked","start":"2015-01-18T11:15:00","end":"2015-01-18T11:25:00","backgroundColor":"#FF7868"},{"id":"1","title":"Booked","start":"2015-01-23T11:15:00","end":"2015-01-23T11:25:00","backgroundColor":"#FF7868"}],
+            dayClick: function(date, jsEvent, view) {
+                /*These are events when a user hits on date square */
+                var format_date = $.fullCalendar.moment( date ).format('YYYY-MM-DD');
+
+                list_appointments(date); /*List events on right side*/
+                
+                $('.fc-day').removeClass('selected_date_calendar');
+
+                /* This is to change the color of the selected date*/
+                $('.fc-day[data-date="' + format_date + '"]').addClass('selected_date_calendar');
+
+                /*disabling click if date is past date*/
+                //var today = calendar.fullCalendar( 'getDate' );
+
+                //~ if (date >= today)
+                //~ {
+                    //~ //calendar.fullCalendar('changeView', 'agendaDay');
+                    //~ //calendar.fullCalendar('gotoDate', date);
+                //~ }
+            },
+            eventClick: function(calEvent, jsEvent, view) {
+                //calendar.fullCalendar( 'removeEvents', calEvent.id );
+                //calendar.fullCalendar('unselect');
+            }
+        });
+
+        /*Setting Custom text on header*/
+        $('.fc-left').html('<h2>Schedule</h2>');
+    });
+
+    /*List appointments on clicking next and previous button*/
+    $(document).on('click', '.fc-next-button, .fc-prev-button', function()
+    {
+        var calendar = $('#calendar');
+        var date = calendar.fullCalendar( 'getDate' );
+        list_appointments(date);
+    });
+
+    /*Listing Appointments on a particular date */
+    function list_appointments(date)
+    {
+        date = $.fullCalendar.moment( date ).format('YYYY-MM-DD');
+
+        $.post(SITE_URL + 'schedule/list_appointments/' + date, '', function(response)
+        {
+            response = $.parseJSON(response);
+            $('div.schedule-right').replaceWith(response);
+        });
+    }
+
+    $(window).ready(function(){
+        var WinHeight = $('.schedule-left').height();
+        $('.schedule-right').css('max-height', WinHeight)
+    });
+    
+</script>
+    </head>
+    <body>
+        <div style="display: none;" class="loader"></div>
+        <div class="container">
+            <div class="header-section">
+                                                <div class="f-left">
+    <!--START logo-section-->
+    <div class="logo">
+        <a href="http://localhost/doctornow/website/">
+            <img src="Doctor%27s%20Schedule%20%7C%20Doctor%20Now_files/logo.png">
+        </a>
+    </div>
+    <!--END logo-section-->
+    <!--START top-navigation-->
+    <ul class="top-nevigation">
+        <li>
+            <a class="active" href="http://localhost/doctornow/website/schedule">Schedule</a>
+        </li>
+        <li>
+            <a class="" href="http://localhost/doctornow/website/shifts">Shift</a>
+        </li>
+
+                    <li>
+                <a class="" href="http://localhost/doctornow/website/appointments/conference/N01wWlpTQ0FNZnhOOGRIU2tvWHZxQT09">Appointments</a>
+            </li>
+            </ul>
+</div>
+<div class="f-right">
+            <div class="description">
+            <div class="dr-pik">
+                <a href="http://localhost/doctornow/website/profile">
+                    <img src="Doctor%27s%20Schedule%20%7C%20Doctor%20Now_files/1419947060-doctor790x1024.jpg" onerror="this.src='http://localhost/doctornow/website/assets/images/user.gif'">
+                </a>
+            </div>
+            <div class="dr-name">
+                <h4>
+                    <a href="http://localhost/doctornow/website/profile">
+                        Dr Punit  Kumar                    </a>
+                </h4>
+                <span id="clock">6:18:41 AM</span>
+            </div>
+        </div>
+        <a class="sign-out" href="http://localhost/doctornow/website/logout">Sign Out</a>
+    </div>
+            </div>
+            <div class="contant-area ">
+                
+                
+                <div class="calendar-page-outer-con">
+                    <div class="schedule-left">
+        <div class="notification gry-bg">
+                    <span>
+                <a target="_blank" href="http://localhost/doctornow/website/appointments/conference/N01wWlpTQ0FNZnhOOGRIU2tvWHZxQT09">
+                    Next appointment: Sun, 18 Jan 2015 | 11:15 am                </a>
+            </span>
+            </div>
+    <div class="schedule-pnl">
+        <div class="schedule-calender fc fc-ltr fc-unthemed" id="calendar"><div class="fc-toolbar"><div class="fc-left"><h2>January 2015</h2></div><div class="fc-right"><button type="button" class="fc-prev-button fc-button fc-state-default fc-corner-left fc-corner-right"><span class="fc-icon fc-icon-left-single-arrow"></span></button><h2>January 2015</h2><button type="button" class="fc-next-button fc-button fc-state-default fc-corner-left fc-corner-right"><span class="fc-icon fc-icon-right-single-arrow"></span></button></div><div class="fc-center"></div><div class="fc-clear"></div></div><div style="" class="fc-view-container"><div style="" class="fc-view fc-month-view fc-basic-view"><table><thead><tr><td class="fc-widget-header"><div class="fc-row fc-widget-header"><table><thead><tr><th class="fc-day-header fc-widget-header fc-sun">Sun</th><th class="fc-day-header fc-widget-header fc-mon">Mon</th><th class="fc-day-header fc-widget-header fc-tue">Tue</th><th class="fc-day-header fc-widget-header fc-wed">Wed</th><th class="fc-day-header fc-widget-header fc-thu">Thu</th><th class="fc-day-header fc-widget-header fc-fri">Fri</th><th class="fc-day-header fc-widget-header fc-sat">Sat</th></tr></thead></table></div></td></tr></thead><tbody><tr><td class="fc-widget-content"><div style="" class="fc-day-grid-container"><div class="fc-day-grid"><div style="height: 125px;" class="fc-row fc-week fc-widget-content fc-rigid"><div class="fc-bg"><table><tbody><tr><td style="background-color: rgb(229, 229, 229);" data-shifts="0" class="fc-day fc-widget-content fc-sun fc-other-month fc-past" data-date="2014-12-28"></td><td style="background-color: rgb(229, 229, 229);" data-shifts="0" class="fc-day fc-widget-content fc-mon fc-other-month fc-past" data-date="2014-12-29"></td><td style="background-color: rgb(229, 229, 229);" data-shifts="0" class="fc-day fc-widget-content fc-tue fc-other-month fc-past" data-date="2014-12-30"></td><td style="background-color: rgb(229, 229, 229);" data-shifts="0" class="fc-day fc-widget-content fc-wed fc-other-month fc-past" data-date="2014-12-31"></td><td style="background-color: rgb(229, 229, 229);" data-shifts="0" class="fc-day fc-widget-content fc-thu fc-past" data-date="2015-01-01"></td><td style="background-color: rgb(229, 229, 229);" data-shifts="0" class="fc-day fc-widget-content fc-fri fc-past" data-date="2015-01-02"></td><td style="background-color: rgb(229, 229, 229);" data-shifts="0" class="fc-day fc-widget-content fc-sat fc-past" data-date="2015-01-03"></td></tr></tbody></table></div><div class="fc-content-skeleton"><table><thead><tr><td class="fc-day-number fc-sun fc-other-month fc-past" data-date="2014-12-28">28</td><td class="fc-day-number fc-mon fc-other-month fc-past" data-date="2014-12-29">29</td><td class="fc-day-number fc-tue fc-other-month fc-past" data-date="2014-12-30">30</td><td class="fc-day-number fc-wed fc-other-month fc-past" data-date="2014-12-31">31</td><td class="fc-day-number fc-thu fc-past" data-date="2015-01-01">1</td><td class="fc-day-number fc-fri fc-past" data-date="2015-01-02">2</td><td class="fc-day-number fc-sat fc-past" data-date="2015-01-03">3</td></tr></thead><tbody><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr></tbody></table></div></div><div style="height: 125px;" class="fc-row fc-week fc-widget-content fc-rigid"><div class="fc-bg"><table><tbody><tr><td style="background-color: rgb(229, 229, 229);" data-shifts="0" class="fc-day fc-widget-content fc-sun fc-past" data-date="2015-01-04"></td><td style="background-color: rgb(229, 229, 229);" data-shifts="0" class="fc-day fc-widget-content fc-mon fc-past" data-date="2015-01-05"></td><td style="background-color: rgb(229, 229, 229);" data-shifts="0" class="fc-day fc-widget-content fc-tue fc-past" data-date="2015-01-06"></td><td style="background-color: rgb(229, 229, 229);" data-shifts="0" class="fc-day fc-widget-content fc-wed fc-past" data-date="2015-01-07"></td><td style="background-color: rgb(229, 229, 229);" data-shifts="0" class="fc-day fc-widget-content fc-thu fc-past" data-date="2015-01-08"></td><td style="background-color: rgb(229, 229, 229);" data-shifts="0" class="fc-day fc-widget-content fc-fri fc-past" data-date="2015-01-09"></td><td style="background-color: rgb(229, 229, 229);" data-shifts="0" class="fc-day fc-widget-content fc-sat fc-past" data-date="2015-01-10"></td></tr></tbody></table></div><div class="fc-content-skeleton"><table><thead><tr><td class="fc-day-number fc-sun fc-past" data-date="2015-01-04">4</td><td class="fc-day-number fc-mon fc-past" data-date="2015-01-05">5</td><td class="fc-day-number fc-tue fc-past" data-date="2015-01-06">6</td><td class="fc-day-number fc-wed fc-past" data-date="2015-01-07">7</td><td class="fc-day-number fc-thu fc-past" data-date="2015-01-08">8</td><td class="fc-day-number fc-fri fc-past" data-date="2015-01-09">9</td><td class="fc-day-number fc-sat fc-past" data-date="2015-01-10">10</td></tr></thead><tbody><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr></tbody></table></div></div><div style="height: 125px;" class="fc-row fc-week fc-widget-content fc-rigid"><div class="fc-bg"><table><tbody><tr><td style="background-color: rgb(229, 229, 229);" data-shifts="0" class="fc-day fc-widget-content fc-sun fc-past" data-date="2015-01-11"></td><td data-shifts="0" class="fc-day fc-widget-content fc-mon fc-today fc-state-highlight" data-date="2015-01-12"></td><td data-shifts="0" class="fc-day fc-widget-content fc-tue fc-future" data-date="2015-01-13"></td><td data-shifts="0" class="fc-day fc-widget-content fc-wed fc-future" data-date="2015-01-14"></td><td data-shifts="0" class="fc-day fc-widget-content fc-thu fc-future" data-date="2015-01-15"></td><td data-shifts="0" class="fc-day fc-widget-content fc-fri fc-future" data-date="2015-01-16"></td><td data-shifts="0" class="fc-day fc-widget-content fc-sat fc-future" data-date="2015-01-17"></td></tr></tbody></table></div><div class="fc-content-skeleton"><table><thead><tr><td class="fc-day-number fc-sun fc-past" data-date="2015-01-11">11</td><td class="fc-day-number fc-mon fc-today fc-state-highlight" data-date="2015-01-12">12</td><td class="fc-day-number fc-tue fc-future" data-date="2015-01-13">13</td><td class="fc-day-number fc-wed fc-future" data-date="2015-01-14">14</td><td class="fc-day-number fc-thu fc-future" data-date="2015-01-15">15</td><td class="fc-day-number fc-fri fc-future" data-date="2015-01-16">16</td><td class="fc-day-number fc-sat fc-future" data-date="2015-01-17">17</td></tr></thead><tbody><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr></tbody></table></div></div><div style="height: 125px;" class="fc-row fc-week fc-widget-content fc-rigid"><div class="fc-bg"><table><tbody><tr><td data-shifts="0" class="fc-day fc-widget-content fc-sun fc-future" data-date="2015-01-18"></td><td data-shifts="0" class="fc-day fc-widget-content fc-mon fc-future" data-date="2015-01-19"></td><td data-shifts="0" class="fc-day fc-widget-content fc-tue fc-future" data-date="2015-01-20"></td><td data-shifts="0" class="fc-day fc-widget-content fc-wed fc-future" data-date="2015-01-21"></td><td class="fc-day fc-widget-content fc-thu fc-future" data-date="2015-01-22"><span class="icon_calendar"><i class="fa fa-clock-o"></i></span></td><td data-shifts="0" class="fc-day fc-widget-content fc-fri fc-future selected_date_calendar" data-date="2015-01-23"></td><td data-shifts="0" class="fc-day fc-widget-content fc-sat fc-future" data-date="2015-01-24"></td></tr></tbody></table></div><div class="fc-content-skeleton"><table><thead><tr><td class="fc-day-number fc-sun fc-future" data-date="2015-01-18">18</td><td class="fc-day-number fc-mon fc-future" data-date="2015-01-19">19</td><td class="fc-day-number fc-tue fc-future" data-date="2015-01-20">20</td><td class="fc-day-number fc-wed fc-future" data-date="2015-01-21">21</td><td title="" data-shifts="1" class="fc-day-number fc-thu fc-future" data-date="2015-01-22">22</td><td class="fc-day-number fc-fri fc-future" data-date="2015-01-23">23</td><td class="fc-day-number fc-sat fc-future" data-date="2015-01-24">24</td></tr></thead><tbody><tr><td class="fc-event-container"><a class="fc-day-grid-event fc-event fc-start fc-end" style="background-color:#FF7868"><div class="fc-content"><span class="fc-time">11:15a</span> <span class="fc-title">Booked</span></div></a></td><td></td><td></td><td></td><td></td><td class="fc-event-container"><a class="fc-day-grid-event fc-event fc-start fc-end" style="background-color:#FF7868"><div class="fc-content"><span class="fc-time">11:15a</span> <span class="fc-title">Booked</span></div></a></td><td></td></tr></tbody></table></div></div><div style="height: 125px;" class="fc-row fc-week fc-widget-content fc-rigid"><div class="fc-bg"><table><tbody><tr><td data-shifts="0" class="fc-day fc-widget-content fc-sun fc-future" data-date="2015-01-25"></td><td data-shifts="0" class="fc-day fc-widget-content fc-mon fc-future" data-date="2015-01-26"></td><td data-shifts="0" class="fc-day fc-widget-content fc-tue fc-future" data-date="2015-01-27"></td><td data-shifts="0" class="fc-day fc-widget-content fc-wed fc-future" data-date="2015-01-28"></td><td data-shifts="0" class="fc-day fc-widget-content fc-thu fc-future" data-date="2015-01-29"></td><td data-shifts="0" class="fc-day fc-widget-content fc-fri fc-future" data-date="2015-01-30"></td><td data-shifts="0" class="fc-day fc-widget-content fc-sat fc-future" data-date="2015-01-31"></td></tr></tbody></table></div><div class="fc-content-skeleton"><table><thead><tr><td class="fc-day-number fc-sun fc-future" data-date="2015-01-25">25</td><td class="fc-day-number fc-mon fc-future" data-date="2015-01-26">26</td><td class="fc-day-number fc-tue fc-future" data-date="2015-01-27">27</td><td class="fc-day-number fc-wed fc-future" data-date="2015-01-28">28</td><td class="fc-day-number fc-thu fc-future" data-date="2015-01-29">29</td><td class="fc-day-number fc-fri fc-future" data-date="2015-01-30">30</td><td class="fc-day-number fc-sat fc-future" data-date="2015-01-31">31</td></tr></thead><tbody><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr></tbody></table></div></div><div style="height: 127px;" class="fc-row fc-week fc-widget-content fc-rigid"><div class="fc-bg"><table><tbody><tr><td data-shifts="0" class="fc-day fc-widget-content fc-sun fc-other-month fc-future" data-date="2015-02-01"></td><td data-shifts="0" class="fc-day fc-widget-content fc-mon fc-other-month fc-future" data-date="2015-02-02"></td><td data-shifts="0" class="fc-day fc-widget-content fc-tue fc-other-month fc-future" data-date="2015-02-03"></td><td data-shifts="0" class="fc-day fc-widget-content fc-wed fc-other-month fc-future" data-date="2015-02-04"></td><td data-shifts="0" class="fc-day fc-widget-content fc-thu fc-other-month fc-future" data-date="2015-02-05"></td><td data-shifts="0" class="fc-day fc-widget-content fc-fri fc-other-month fc-future" data-date="2015-02-06"></td><td data-shifts="0" class="fc-day fc-widget-content fc-sat fc-other-month fc-future" data-date="2015-02-07"></td></tr></tbody></table></div><div class="fc-content-skeleton"><table><thead><tr><td class="fc-day-number fc-sun fc-other-month fc-future" data-date="2015-02-01">1</td><td class="fc-day-number fc-mon fc-other-month fc-future" data-date="2015-02-02">2</td><td class="fc-day-number fc-tue fc-other-month fc-future" data-date="2015-02-03">3</td><td class="fc-day-number fc-wed fc-other-month fc-future" data-date="2015-02-04">4</td><td class="fc-day-number fc-thu fc-other-month fc-future" data-date="2015-02-05">5</td><td class="fc-day-number fc-fri fc-other-month fc-future" data-date="2015-02-06">6</td><td class="fc-day-number fc-sat fc-other-month fc-future" data-date="2015-02-07">7</td></tr></thead><tbody><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr></tbody></table></div></div></div></div></td></tr></tbody></table></div></div> </div>
+    </div>
+</div>
+<div class="schedule-right">
+            <div class="notification dark-bg"> 18 January  Appointments</div>
+        <ul class="appointments">
+                            <li>
+                    <h2>Andy Davis</h2>
+                    <p>Appointment time: 11:15 am</p>
+                    <a href="http://localhost/doctornow/website/schedule/schedule_details/2" class="details-link open_popup">Details</a>
+                </li>
+                    </ul>
+    </div>
+
+
+
+
+
+
+                </div>
+
+                                <div class="popup-otr">
+                    <div class="p-overlay"></div>
+                    <div class="p-con">
+                        <a href="#" class="cancel-btn close_popup">&nbsp;</a>
+                        <div class="p-con-box popup-modal-content"> </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script>
+        
+
+        
+        
+        
+        </script>
+    
+
+
+</body></html>

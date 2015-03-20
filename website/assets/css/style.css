@@ -1,0 +1,1663 @@
+log-btn@font-face {
+    font-family: 'GothamRoundedMedium';
+    src: url('fonts/gothamrnd-medium.eot');
+    src: url('fonts/gothamrnd-medium.eot') format('embedded-opentype'),
+         url('fonts/gothamrnd-medium.woff2') format('woff2'),
+         url('fonts/gothamrnd-medium.woff') format('woff'),
+         url('fonts/gothamrnd-medium.ttf') format('truetype'),
+         url('fonts/gothamrnd-medium.svg#GothamRoundedMedium') format('svg'),
+}
+
+@font-face {
+    font-family: 'GothamRoundedBook';
+    src: url('fonts/gothamrnd-book.eot');
+    src: url('fonts/gothamrnd-book.eot') format('embedded-opentype'),
+         url('fonts/gothamrnd-book.woff2') format('woff2'),
+         url('fonts/gothamrnd-book.woff') format('woff'),
+         url('fonts/gothamrnd-book.ttf') format('truetype'),
+         url('fonts/gothamrnd-book.svg#GothamRoundedBook') format('svg');
+}
+
+@font-face {
+    font-family: 'Proxima';
+    src: url('fonts/Proxima-nova-regular.otf');
+}
+
+@font-face {
+    font-family: 'Proxima-medium';
+    src: url('fonts/proxima-nova-semibold.otf');
+}
+
+
+body{font-family: 'Proxima'; outline:0;}
+
+/*.container{width:1170px; margin: 0 auto;}*/
+
+/*Calendar CSS */
+.fc {
+    direction: ltr;
+    text-align: left;
+    font-family: 'Proxima-medium';
+}
+
+.fc-rtl {
+    text-align: right;
+}
+
+.fc { /* extra precedence to overcome jqui */
+    font-size: 1em;
+    color:#878787;
+}
+
+
+/* Colors
+--------------------------------------------------------------------------------------------------*/
+
+.fc-unthemed th,
+.fc-unthemed td,
+.fc-unthemed hr,
+.fc-unthemed thead,
+.fc-unthemed tbody,
+.fc-unthemed .fc-row,
+.fc-unthemed .fc-popover {
+    border-color: #ddd;
+}
+
+.fc-unthemed .fc-popover {
+    background-color: #fff;
+}
+
+.fc-unthemed hr,
+.fc-unthemed .fc-popover .fc-header {
+    background: #eee;
+}
+
+.fc-unthemed .fc-popover .fc-header .fc-close {
+    color: #666;
+}
+
+.fc-unthemed .fc-today {
+    background: #fcf8e3;
+}
+
+.fc-highlight { /* when user is selecting cells */
+    background: #bce8f1;
+    opacity: .3;
+    filter: alpha(opacity=30); /* for IE */
+}
+
+.fc-bgevent { /* default look for background events */
+    background: rgb(143, 223, 130);
+    opacity: .3;
+    filter: alpha(opacity=30); /* for IE */
+}
+
+.fc-nonbusiness { /* default look for non-business-hours areas */
+    /* will inherit .fc-bgevent's styles */
+    background: #ccc;
+}
+
+
+/* Icons (inline elements with styled text that mock arrow icons)
+--------------------------------------------------------------------------------------------------*/
+
+.fc-icon {
+    display: inline-block;
+    font-size: 2em;
+    line-height: .5em;
+    height: .5em; /* will make the total height 1em */
+    font-family: "Courier New", Courier, monospace;
+}
+
+.fc-icon-left-single-arrow:after {
+    content: "\02039";
+    font-weight: bold;
+}
+
+.fc-icon-right-single-arrow:after {
+    content: "\0203A";
+    font-weight: bold;
+}
+
+.fc-icon-left-double-arrow:after {
+    content: "\000AB";
+}
+
+.fc-icon-right-double-arrow:after {
+    content: "\000BB";
+}
+
+.fc-icon-x:after {
+    content: "\000D7";
+}
+
+
+/* Buttons (styled <button> tags, normalized to work cross-browser)
+--------------------------------------------------------------------------------------------------*/
+
+.fc button {
+    /* force height to include the border and padding */
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+
+    /* dimensions */
+    margin: 0;
+    height: 2.1em;
+    padding: 0 .6em;
+
+    /* text & cursor */
+    font-size: 1em; /* normalize */
+    white-space: nowrap;
+    cursor: pointer;
+}
+
+/* Firefox has an annoying inner border */
+.fc button::-moz-focus-inner { margin: 0; padding: 0; }
+    
+.fc-state-default { /* non-theme */
+    border: 1px solid;
+}
+
+.fc-state-default.fc-corner-left { /* non-theme */
+    border-top-left-radius: 4px;
+    border-bottom-left-radius: 4px;
+}
+
+.fc-state-default.fc-corner-right { /* non-theme */
+    border-top-right-radius: 4px;
+    border-bottom-right-radius: 4px;
+}
+
+/* icons in buttons */
+
+.fc button .fc-icon { /* non-theme */
+    position: relative;
+    top: .05em; /* seems to be a good adjustment across browsers */
+    margin: 0 .1em;
+}
+    
+/*
+  button states
+  borrowed from twitter bootstrap (http://twitter.github.com/bootstrap/)
+*/
+
+.fc-state-default {
+    background-color: #f5f5f5;
+    background-image: -moz-linear-gradient(top, #ffffff, #e6e6e6);
+    background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#ffffff), to(#e6e6e6));
+    background-image: -webkit-linear-gradient(top, #ffffff, #e6e6e6);
+    background-image: -o-linear-gradient(top, #ffffff, #e6e6e6);
+    background-image: linear-gradient(to bottom, #ffffff, #e6e6e6);
+    background-repeat: repeat-x;
+    border-color: #e6e6e6 #e6e6e6 #bfbfbf;
+    border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
+    color: #333;
+    text-shadow: 0 1px 1px rgba(255, 255, 255, 0.75);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+.fc-state-hover,
+.fc-state-down,
+.fc-state-active,
+.fc-state-disabled {
+    color: #333333;
+    background-color: #e6e6e6;
+}
+
+.fc-state-hover {
+    color: #333333;
+    text-decoration: none;
+    background-position: 0 -15px;
+    -webkit-transition: background-position 0.1s linear;
+       -moz-transition: background-position 0.1s linear;
+         -o-transition: background-position 0.1s linear;
+            transition: background-position 0.1s linear;
+}
+
+.fc-state-down,
+.fc-state-active {
+    background-color: #cccccc;
+    background-image: none;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.15), 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+.fc-state-disabled {
+    cursor: default;
+    background-image: none;
+    opacity: 0.65;
+    filter: alpha(opacity=65);
+    box-shadow: none;
+}
+
+
+/* Buttons Groups
+--------------------------------------------------------------------------------------------------*/
+
+.fc-button-group {
+    display: inline-block;
+}
+
+/*
+every button that is not first in a button group should scootch over one pixel and cover the
+previous button's border...
+*/
+
+.fc .fc-button-group > * { /* extra precedence b/c buttons have margin set to zero */
+    float: left;
+    margin: 0 0 0 -1px;
+}
+
+.fc .fc-button-group > :first-child { /* same */
+    margin-left: 0;
+}
+
+
+/* Popover
+--------------------------------------------------------------------------------------------------*/
+
+.fc-popover {
+    position: absolute;
+    box-shadow: 0 2px 6px rgba(0,0,0,.15);
+}
+
+.fc-popover .fc-header {
+    padding: 2px 4px;
+}
+
+.fc-popover .fc-header .fc-title {
+    margin: 0 2px;
+}
+
+.fc-popover .fc-header .fc-close {
+    cursor: pointer;
+}
+
+.fc-ltr .fc-popover .fc-header .fc-title,
+.fc-rtl .fc-popover .fc-header .fc-close {
+    float: left;
+}
+
+.fc-rtl .fc-popover .fc-header .fc-title,
+.fc-ltr .fc-popover .fc-header .fc-close {
+    float: right;
+}
+
+/* unthemed */
+
+.fc-unthemed .fc-popover {
+    border-width: 1px;
+    border-style: solid;
+}
+
+.fc-unthemed .fc-popover .fc-header .fc-close {
+    font-size: 25px;
+    margin-top: 4px;
+}
+
+/* jqui themed */
+
+.fc-popover > .ui-widget-header + .ui-widget-content {
+    border-top: 0; /* where they meet, let the header have the border */
+}
+
+
+/* Misc Reusable Components
+--------------------------------------------------------------------------------------------------*/
+
+.fc hr {
+    height: 0;
+    margin: 0;
+    padding: 0 0 2px; /* height is unreliable across browsers, so use padding */
+    border-style: solid;
+    border-width: 1px 0;
+}
+
+.fc-clear {
+    clear: both;
+}
+
+.fc-bg,
+.fc-bgevent-skeleton,
+.fc-highlight-skeleton,
+.fc-helper-skeleton {
+    /* these element should always cling to top-left/right corners */
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+}
+
+.fc-bg {
+    bottom: 0; /* strech bg to bottom edge */
+}
+
+.fc-bg table {
+    height: 100%; /* strech bg to bottom edge */
+}
+
+
+/* Tables
+--------------------------------------------------------------------------------------------------*/
+
+.fc table {
+    width: 100%;
+    table-layout: fixed;
+    border-collapse: collapse;
+    border-spacing: 0;
+    font-size: 1em; /* normalize cross-browser */
+}
+
+.fc th {
+    text-align: center;
+    background:#0088C7;
+    color:#fff;
+    font-weight:lighter;
+}
+
+.fc th,
+.fc td {
+    border-style: solid;
+    border-width: 1px;
+    padding: 3px;
+    vertical-align: top;
+}
+
+.fc td.fc-today {
+    border-style: double; /* overcome neighboring borders */
+}
+
+
+/* Fake Table Rows
+--------------------------------------------------------------------------------------------------*/
+
+.fc .fc-row { /* extra precedence to overcome themes w/ .ui-widget-content forcing a 1px border */
+    /* no visible border by default. but make available if need be (scrollbar width compensation) */
+    border-style: solid;
+    border-width: 0;
+}
+
+.fc-row table {
+    /* don't put left/right border on anything within a fake row.
+       the outer tbody will worry about this */
+    border-left: 0 hidden transparent;
+    border-right: 0 hidden transparent;
+
+    /* no bottom borders on rows */
+    border-bottom: 0 hidden transparent; 
+}
+
+.fc-row:first-child table {
+    border-top: 0 hidden transparent; /* no top border on first row */
+}
+
+
+/* Day Row (used within the header and the DayGrid)
+--------------------------------------------------------------------------------------------------*/
+
+.fc-row {
+    position: relative;
+}
+
+.fc-row .fc-bg {
+    z-index: 1;
+}
+
+/* highlighting cells & background event skeleton */
+
+.fc-row .fc-bgevent-skeleton,
+.fc-row .fc-highlight-skeleton {
+    bottom: 0; /* stretch skeleton to bottom of row */
+}
+
+.fc-row .fc-bgevent-skeleton table,
+.fc-row .fc-highlight-skeleton table {
+    height: 100%; /* stretch skeleton to bottom of row */
+}
+
+.fc-row .fc-highlight-skeleton td,
+.fc-row .fc-bgevent-skeleton td {
+    border-color: transparent;
+}
+
+.fc-row .fc-bgevent-skeleton {
+    z-index: 2;
+
+}
+
+.fc-row .fc-highlight-skeleton {
+    z-index: 3;
+}
+
+/*
+row content (which contains day/week numbers and events) as well as "helper" (which contains
+temporary rendered events).
+*/
+
+.fc-row .fc-content-skeleton {
+    position: relative;
+    z-index: 4;
+    padding-bottom: 2px; /* matches the space above the events */
+}
+
+.fc-row .fc-helper-skeleton {
+    z-index: 5;
+}
+
+.fc-row .fc-content-skeleton td,
+.fc-row .fc-helper-skeleton td {
+    /* see-through to the background below */
+    background: none; /* in case <td>s are globally styled */
+    border-color: transparent;
+
+    /* don't put a border between events and/or the day number */
+    border-bottom: 0;
+}
+
+.fc-row .fc-content-skeleton tbody td, /* cells with events inside (so NOT the day number cell) */
+.fc-row .fc-helper-skeleton tbody td {
+    /* don't put a border between event cells */
+    border-top: 0;
+}
+
+
+/* Scrolling Container
+--------------------------------------------------------------------------------------------------*/
+
+.fc-scroller { /* this class goes on elements for guaranteed vertical scrollbars */
+    overflow-y: scroll;
+    overflow-x: hidden;
+}
+
+.fc-scroller > * { /* we expect an immediate inner element */
+    position: relative; /* re-scope all positions */
+    width: 100%; /* hack to force re-sizing this inner element when scrollbars appear/disappear */
+    overflow: hidden; /* don't let negative margins or absolute positioning create further scroll */
+}
+
+
+/* Global Event Styles
+--------------------------------------------------------------------------------------------------*/
+
+.fc-event {
+    position: relative; /* for resize handle and other inner positioning */
+    display: block; /* make the <a> tag block */
+    font-size: .85em;
+    line-height: 1.3;
+    border-radius: 3px;
+    /*border: 1px solid #5EAE4F;*/ /* default BORDER color */
+    background-color: #5EAE4F; /* default BACKGROUND color */
+    font-weight: normal; /* undo jqui's ui-widget-header bold */
+}
+
+/* overpower some of bootstrap's and jqui's styles on <a> tags */
+.fc-event,
+.fc-event:hover,
+.ui-widget .fc-event {
+    color: #fff; /* default TEXT color */
+    text-decoration: none; /* if <a> has an href */
+}
+
+.fc-event[href],
+.fc-event.fc-draggable {
+    cursor: pointer; /* give events with links and draggable events a hand mouse pointer */
+}
+
+.fc-not-allowed, /* causes a "warning" cursor. applied on body */
+.fc-not-allowed .fc-event { /* to override an event's custom cursor */
+    cursor: not-allowed;
+}
+
+
+/* DayGrid events
+----------------------------------------------------------------------------------------------------
+We use the full "fc-day-grid-event" class instead of using descendants because the event won't
+be a descendant of the grid when it is being dragged.
+*/
+
+.fc-day-grid-event {
+    margin: 1px 2px 0; /* spacing between events and edges */
+    padding: 0 1px;
+}
+
+/* events that are continuing to/from another week. kill rounded corners and butt up against edge */
+
+.fc-ltr .fc-day-grid-event.fc-not-start,
+.fc-rtl .fc-day-grid-event.fc-not-end {
+    margin-left: 0;
+    border-left-width: 0;
+    padding-left: 1px; /* replace the border with padding */
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+}
+
+.fc-ltr .fc-day-grid-event.fc-not-end,
+.fc-rtl .fc-day-grid-event.fc-not-start {
+    margin-right: 0;
+    border-right-width: 0;
+    padding-right: 1px; /* replace the border with padding */
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+}
+
+.fc-day-grid-event > .fc-content { /* force events to be one-line tall */
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+.fc-day-grid-event .fc-time {
+    font-weight: bold;
+}
+
+/* resize handle (outside of fc-content, so can go outside of bounds) */
+
+.fc-day-grid-event .fc-resizer {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 7px;
+}
+
+.fc-ltr .fc-day-grid-event .fc-resizer {
+    right: -3px;
+    cursor: e-resize;
+}
+
+.fc-rtl .fc-day-grid-event .fc-resizer {
+    left: -3px;
+    cursor: w-resize;
+}
+
+
+/* Event Limiting
+--------------------------------------------------------------------------------------------------*/
+
+/* "more" link that represents hidden events */
+
+a.fc-more {
+    margin: 1px 3px;
+    font-size: .85em;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+a.fc-more:hover {
+    text-decoration: underline;
+}
+
+.fc-limited { /* rows and cells that are hidden because of a "more" link */
+    display: none;
+}
+
+/* popover that appears when "more" link is clicked */
+
+.fc-day-grid .fc-row {
+    z-index: 1; /* make the "more" popover one higher than this */
+}
+
+.fc-more-popover {
+    z-index: 2;
+    width: 220px;
+}
+
+.fc-more-popover .fc-event-container {
+    padding: 10px;
+}
+
+/* Toolbar
+--------------------------------------------------------------------------------------------------*/
+
+.fc-toolbar {
+    text-align: center;
+    margin-bottom: 1em;
+}
+
+.fc-toolbar .fc-left {
+    float: left;
+}
+
+.fc-toolbar .fc-right {
+    float: right;
+}
+
+.fc-toolbar .fc-center {
+    display: inline-block;
+}
+
+/* the things within each left/right/center section */
+.fc .fc-toolbar > * > * { /* extra precedence to override button border margins */
+    float: left;
+    margin-left: .75em;
+}
+
+/* the first thing within each left/center/right section */
+.fc .fc-toolbar > * > :first-child { /* extra precedence to override button border margins */
+    margin-left: 0;
+}
+    
+/* title text */
+
+.fc-toolbar h2 {
+    margin: 0;
+    padding:10px 0 0;
+}
+
+/* button layering (for border precedence) */
+
+.fc-toolbar button {
+    position: relative;
+}
+
+.fc-toolbar .fc-state-hover,
+.fc-toolbar .ui-state-hover {
+    z-index: 2;
+}
+    
+.fc-toolbar .fc-state-down {
+    z-index: 3;
+}
+
+.fc-toolbar .fc-state-active,
+.fc-toolbar .ui-state-active {
+    z-index: 4;
+}
+
+.fc-toolbar button:focus {
+    z-index: 5;
+}
+
+
+/* View Structure
+--------------------------------------------------------------------------------------------------*/
+
+/* undo twitter bootstrap's box-sizing rules. normalizes positioning techniques */
+/* don't do this for the toolbar because we'll want bootstrap to style those buttons as some pt */
+.fc-view-container *,
+.fc-view-container *:before,
+.fc-view-container *:after {
+    -webkit-box-sizing: content-box;
+       -moz-box-sizing: content-box;
+            box-sizing: content-box;
+}
+
+.fc-view, /* scope positioning and z-index's for everything within the view */
+.fc-view > table { /* so dragged elements can be above the view's main element */
+    position: relative;
+    z-index: 1;
+}
+
+/* BasicView
+--------------------------------------------------------------------------------------------------*/
+
+/* day row structure */
+
+.fc-basicWeek-view .fc-content-skeleton,
+.fc-basicDay-view .fc-content-skeleton {
+    /* we are sure there are no day numbers in these views, so... */
+    padding-top: 1px; /* add a pixel to make sure there are 2px padding above events */
+    padding-bottom: 1em; /* ensure a space at bottom of cell for user selecting/clicking */
+}
+
+.fc-basic-view tbody .fc-row {
+    min-height: 4em; /* ensure that all rows are at least this tall */
+}
+
+/* a "rigid" row will take up a constant amount of height because content-skeleton is absolute */
+
+.fc-row.fc-rigid {
+    overflow: hidden;
+}
+
+.fc-row.fc-rigid .fc-content-skeleton {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+}
+
+/* week and day number styling */
+
+.fc-basic-view .fc-week-number,
+.fc-basic-view .fc-day-number {
+    padding: 0 2px;
+}
+
+.fc-basic-view td.fc-week-number span,
+.fc-basic-view td.fc-day-number {
+    padding-top: 2px;
+    padding-bottom: 2px;
+    color:#0088C7;
+}
+
+.fc-basic-view .fc-week-number {
+    text-align: center;
+}
+
+.fc-basic-view .fc-week-number span {
+    /* work around the way we do column resizing and ensure a minimum width */
+    display: inline-block;
+    min-width: 1.25em;
+}
+
+.fc-ltr .fc-basic-view .fc-day-number {
+    text-align: right;
+}
+
+.fc-rtl .fc-basic-view .fc-day-number {
+    text-align: left;
+}
+
+.fc-day-number.fc-other-month {
+    opacity: 0.3;
+    filter: alpha(opacity=30); /* for IE */
+    /* opacity with small font can sometimes look too faded
+       might want to set the 'color' property instead
+       making day-numbers bold also fixes the problem */
+}
+
+/* AgendaView all-day area
+--------------------------------------------------------------------------------------------------*/
+
+.fc-agenda-view .fc-day-grid {
+    position: relative;
+    z-index: 2; /* so the "more.." popover will be over the time grid */
+}
+
+.fc-agenda-view .fc-day-grid .fc-row {
+    min-height: 3em; /* all-day section will never get shorter than this */
+}
+
+.fc-agenda-view .fc-day-grid .fc-row .fc-content-skeleton {
+    padding-top: 1px; /* add a pixel to make sure there are 2px padding above events */
+    padding-bottom: 1em; /* give space underneath events for clicking/selecting days */
+}
+
+
+/* TimeGrid axis running down the side (for both the all-day area and the slot area)
+--------------------------------------------------------------------------------------------------*/
+
+.fc .fc-axis { /* .fc to overcome default cell styles */
+    vertical-align: middle;
+    padding: 0 4px;
+    white-space: nowrap;
+}
+
+.fc-ltr .fc-axis {
+    text-align: right;
+}
+
+.fc-rtl .fc-axis {
+    text-align: left;
+}
+
+.ui-widget td.fc-axis {
+    font-weight: normal; /* overcome jqui theme making it bold */
+}
+
+
+/* TimeGrid Structure
+--------------------------------------------------------------------------------------------------*/
+
+.fc-time-grid-container, /* so scroll container's z-index is below all-day */
+.fc-time-grid { /* so slats/bg/content/etc positions get scoped within here */
+    position: relative;
+    z-index: 1;
+}
+
+.fc-time-grid {
+    min-height: 100%; /* so if height setting is 'auto', .fc-bg stretches to fill height */
+}
+
+.fc-time-grid table { /* don't put outer borders on slats/bg/content/etc */
+    border: 0 hidden transparent;
+}
+
+.fc-time-grid > .fc-bg {
+    z-index: 1;
+}
+
+.fc-time-grid .fc-slats,
+.fc-time-grid > hr { /* the <hr> AgendaView injects when grid is shorter than scroller */
+    position: relative;
+    z-index: 2;
+}
+
+.fc-time-grid .fc-bgevent-skeleton,
+.fc-time-grid .fc-content-skeleton {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+}
+
+.fc-time-grid .fc-bgevent-skeleton {
+    z-index: 3;
+}
+
+.fc-time-grid .fc-highlight-skeleton {
+    z-index: 4;
+}
+
+.fc-time-grid .fc-content-skeleton {
+    z-index: 5;
+}
+
+.fc-time-grid .fc-helper-skeleton {
+    z-index: 6;
+}
+
+
+/* TimeGrid Slats (lines that run horizontally)
+--------------------------------------------------------------------------------------------------*/
+
+.fc-slats td {
+    height: 1.5em;
+    border-bottom: 0; /* each cell is responsible for its top border */
+}
+
+.fc-slats .fc-minor td {
+    border-top-style: dotted;
+}
+
+.fc-slats .ui-widget-content { /* for jqui theme */
+    background: none; /* see through to fc-bg */
+}
+
+
+/* TimeGrid Highlighting Slots
+--------------------------------------------------------------------------------------------------*/
+
+.fc-time-grid .fc-highlight-container { /* a div within a cell within the fc-highlight-skeleton */
+    position: relative; /* scopes the left/right of the fc-highlight to be in the column */
+}
+
+.fc-time-grid .fc-highlight {
+    position: absolute;
+    left: 0;
+    right: 0;
+    /* top and bottom will be in by JS */
+}
+
+
+/* TimeGrid Event Containment
+--------------------------------------------------------------------------------------------------*/
+
+.fc-time-grid .fc-event-container, /* a div within a cell within the fc-content-skeleton */
+.fc-time-grid .fc-bgevent-container { /* a div within a cell within the fc-bgevent-skeleton */
+    position: relative;
+}
+
+.fc-ltr .fc-time-grid .fc-event-container { /* space on the sides of events for LTR (default) */
+    margin: 0 2.5% 0 2px;
+}
+
+.fc-rtl .fc-time-grid .fc-event-container { /* space on the sides of events for RTL */
+    margin: 0 2px 0 2.5%;
+}
+
+.fc-time-grid .fc-event,
+.fc-time-grid .fc-bgevent {
+    position: absolute;
+    z-index: 1; /* scope inner z-index's */
+}
+
+.fc-time-grid .fc-bgevent {
+    /* background events always span full width */
+    left: 0;
+    right: 0;
+}
+
+
+/* TimeGrid Event Styling
+----------------------------------------------------------------------------------------------------
+We use the full "fc-time-grid-event" class instead of using descendants because the event won't
+be a descendant of the grid when it is being dragged.
+*/
+
+.fc-time-grid-event.fc-not-start { /* events that are continuing from another day */
+    /* replace space made by the top border with padding */
+    border-top-width: 0;
+    padding-top: 1px;
+
+    /* remove top rounded corners */
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+}
+
+.fc-time-grid-event.fc-not-end {
+    /* replace space made by the top border with padding */
+    border-bottom-width: 0;
+    padding-bottom: 1px;
+
+    /* remove bottom rounded corners */
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+}
+
+.fc-time-grid-event {
+    overflow: hidden; /* don't let the bg flow over rounded corners */
+}
+
+.fc-time-grid-event > .fc-content { /* contains the time and title, but no bg and resizer */
+    position: relative;
+    z-index: 2; /* above the bg */
+}
+
+.fc-time-grid-event .fc-time,
+.fc-time-grid-event .fc-title {
+    padding: 0 1px;
+}
+
+.fc-time-grid-event .fc-time {
+    font-size: .85em;
+    white-space: nowrap;
+}
+
+.fc-time-grid-event .fc-bg {
+    z-index: 1;
+    background: #fff;
+    opacity: .25;
+    filter: alpha(opacity=25); /* for IE */
+}
+
+/* short mode, where time and title are on the same line */
+
+.fc-time-grid-event.fc-short .fc-content {
+    /* don't wrap to second line (now that contents will be inline) */
+    white-space: nowrap;
+}
+
+.fc-time-grid-event.fc-short .fc-time,
+.fc-time-grid-event.fc-short .fc-title {
+    /* put the time and title on the same line */
+    display: inline-block;
+    vertical-align: top;
+}
+
+.fc-time-grid-event.fc-short .fc-time span {
+    display: none; /* don't display the full time text... */
+}
+
+.fc-time-grid-event.fc-short .fc-time:before {
+    content: attr(data-start); /* ...instead, display only the start time */
+}
+
+.fc-time-grid-event.fc-short .fc-time:after {
+    content: "\000A0-\000A0"; /* seperate with a dash, wrapped in nbsp's */
+}
+
+.fc-time-grid-event.fc-short .fc-title {
+    font-size: .85em; /* make the title text the same size as the time */
+    padding: 0; /* undo padding from above */
+}
+
+/* resizer */
+
+.fc-time-grid-event .fc-resizer {
+    position: absolute;
+    z-index: 3; /* above content */
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 8px;
+    overflow: hidden;
+    line-height: 8px;
+    font-size: 11px;
+    font-family: monospace;
+    text-align: center;
+    cursor: s-resize;
+}
+
+.fc-time-grid-event .fc-resizer:after {
+    content: "=";
+}
+
+/* header-section CSS */
+.header-section{float:left; width:100%; background: #1D9DD8; font-family: 'GothamRoundedBook';}
+/* f-left CSS */
+.f-left{width:69%;float: left;padding: 10px 0 10px 1%;}
+
+/* logo CSS */
+.logo{float:left;padding: 0 22px 0 }
+
+/* top-nevigation CSS*/
+ul.top-nevigation {display: inline-block; float: left; list-style-type: none; margin: 0; padding: 7px 0 0;}
+ul.top-nevigation li{display: inline-block;}
+ul.top-nevigation a{text-decoration: none;color: #fff; font-size: 13px; padding: 35px 10px; }
+
+/* f-right CSS */
+
+.f-right {float: right; padding: 9px 1%;width: 28%;background: #0088C7}
+/* dr-name CSS */
+.dr-pik{float: left; padding: 0 6px 0 0}
+.dr-pik img{width:38px; height:38px}
+.dr-name{float: left;padding: 2px 0}
+.dr-name h4 {color: #fff; font-size: 13px; line-height: 11px; margin: 6px 0 0;}
+.dr-name a {color: #FFF; text-decoration:none;}
+.dr-name span{font-size: 10px;color: #FFF}
+
+/* sign-out CSS */
+a.sign-out, .sub-btn{border-radius:3px; background: #1D9DD8; color: #FFF; font-size: 15px; text-decoration: none; float: right ;padding: 7px 12px 7px 12px}
+.sub-btn{border-radius:3px; background: #1D9DD8; color: #FFF; font-size: 15px; text-decoration: none; border:none; padding: 7px 12px 7px 12px; float:none; width:180px}
+
+/* contant-area CSS */
+.contant-area{float: left; width:100%}
+
+/* c-left CSS */
+.c-left{float:left; width:58%;padding: 50px 6% 0; background: #F6F6F6; min-height: 660px} 
+ 
+/* title CSS */
+h4.tittle{float:left; text-align: left;margin:0 0 30px 0;  font-size: 16px; color:#B6B6B6 ;}
+
+/* profile-section CSS */
+.profile-section{float:left; width:100%}
+/* profile-photo CSS */
+.profile-photo {float: left;text-align: center; width: 184px;}
+.profile-photo img { border-radius:50%; width:100%}
+/* profile-detail CSS */
+.profile-detail{float:right; width:500px }
+
+/* detail CSS */
+
+
+.profile-detail ul{padding: 0; margin: 0; list-style-type: none; }
+.profile-detail li{float: left; width:100%;border-bottom :1px solid #ccc; padding: 6px 0}
+.profile-detail li label{float:left; width:150px; color: #A5A5A5;font-family: 'GothamRoundedBook';}
+.profile-detail li strong{float:left;  color: #888888; width:60%}
+
+.profile-detail li strong input{font-family: 'GothamRoundedBook'; border-radius:3px; border: medium none;color: #808080; font-size: 15px; height: 25px;padding: 0 0 0 12px; width: 100%;}
+
+/* description-section CSS */
+.description-section{float:left; width:100%; margin: 70px 0 0}
+
+h4.bio-text{ text-align: left;margin:60px 0 23px 0;  font-size: 16px; color:#B6B6B6 ;}
+
+
+/* bio-section CSS */
+.bio-section{float: left; width:310px; border: 1px solid #ccc; background: #fff;padding: 31px 20px; border-radius: 6px}
+.bio-detail{float:left}
+.bio-section p, section .content-section p, .content-section ul li {font-size: 12px;padding-bottom: 12px; color:#B6B6B6 ;font-family: 'GothamRoundedMedium'; }
+
+.bio-detail.right{margin:  0 0 0 26px}
+.bio-section.sign {padding: 20px 0 40px 0;text-align: center;position: relative}
+.edit-button { bottom: 29px; height: 3px; position: absolute; right: 15px;width: 13px;}
+.edit-button img {max-width: 100%}
+
+
+/* c-right CSS */
+.c-right{float: right; padding: 10px 15px;width: 30%;background: #E9E7EA;-webkit-box-sizing: border-box; -moz-box-sizing: border-box;   box-sizing: border-box}
+
+/* right-tittle CSS */
+h4.right-tittle{float:left; text-align: left;margin:25px 0 25px 0;  font-size: 16px; color:#B6B6B6 ;}
+
+/* form-section CSS */
+.form-section{float:left;}
+.form-section input {font-family: 'GothamRoundedBook'; border-radius:3px; border: medium none;color: #949494; font-size: 13px; height: 35px; margin-bottom: 12px;padding: 0 0 0 12px; width: 100%;}
+
+/* done button CSS */
+.done-button{border-radius:3px; background: #B1B1B1; color: #fff !important; font-size: 15px; text-decoration: none; float: left;padding: 7px 29px 7px 29px; cursor:pointer}
+
+.response_section{font-size:15px}
+
+.error_response{color:#973636}
+.correct_response{color:#468D45}
+
+.c-full { width: 96%;padding: 25px 2% 0; background: #F6F6F6; min-height: 690px; text-align: center;}
+.gry-bg { background: #B1B1B1 !important; color: #fff !important;}
+.notification {     padding: 5px 40px; font-size: 0.7em;}
+
+.notification span a {text-decoration:none; color:#fff;}
+
+.live-appointment .col { width: 28%; border: 1px solid #D6D6D6; background: #fff; border-radius: 3px; text-align: left;}
+.left-col { float: left;}
+.right-col { float: right;}
+.profile-img figure { width: 50px; height: 50px; overflow: hidden; border-radius: 50%; display: table-cell; vertical-align: middle;}
+.profile-img figure img { width: 100%; height: 100%; display: block; }
+.content-section { padding: 20px;}
+.profile-img { display: table;}
+.details { padding-left: 10px; display: table-cell;vertical-align: middle; color: #878787; font-weight: normal; font-size: 15px;}
+.details h2 { font-weight: normal; line-height: 11px;}
+.details span { font-family: 'GothamRoundedBook'; font-size: 11px;}
+
+section .heading { background: #F6F6F6; padding: 7px 20px; font-size: 11px; color: #808080; font-weight: normal; border-top: 1px solid #CCC; border-bottom: 1px solid #CCC;}
+.content-section ul {padding:0; list-style: none; margin: 0 auto;}
+.content-section ul li { border-bottom: 1px solid #E6E6E6; padding: 12px 0;}
+.content-section ul li:last-child { border-bottom: 0;}
+.content-section ul li strong { float: right; color: #838381;}
+section .heading.gry-bg { border: 0;}
+textarea.line-text { font-family: "GothamRoundedMedium"; font-size: 11px; color: #666; width: 100%; border: 0; padding: 4px; box-sizing: border-box; line-height: 32px; height: 150px; border-bottom: 0px solid #CCC; resize: none; background: url(../images/text-area.png) no-repeat 0px 30px;}
+.middle-col { width: 40%; display: inline-block; vertical-align: top; margin: 0 auto; text-align: left;}
+.buttons-sec button.cam {cursor:pointer;  border: 1px solid #B2B2B2; border-radius: 5px; padding: 15px 25px; color: #CB1D26; height: 50px; vertical-align: top; width:40%; background: url(../images/cam.png) no-repeat center center; background-size: 30px;}
+.buttons-sec button.end-call { cursor:pointer; border: 1px solid #CB1D26; border-radius: 5px; padding: 15px 25px; color: #CB1D26; min-width: 140px; width: 58%;}
+.buttons-sec button.start-call { background: #fff; cursor:pointer; border: 1px solid #175525; border-radius: 5px; padding: 15px 25px; color: #175525; min-width: 140px; width: 58%;}
+.buttons-sec { display: inline-block;     width: 70%;    text-align: left; vertical-align: bottom;}
+.image-sec { display: inline-block; width: 28%; vertical-align: top;}
+.image-sec figure { width: 110px; height: 110px; border: 2px solid #fff; border-radius: 10px; overflow: hidden;}
+.image-sec figure img { width: 100%; height: auto;}
+.buttons-sec p, .image-sec p, .conclusion-sec p { padding: 5px; border-radius: 3px; margin: 15px auto 0;text-align: center; font-size: 0.9em;}
+.conclusion-sec a {text-decoration:none;}
+.big-img > figure {height: 410px; overflow:hidden;}
+.big-img > figure > img { width: 100%; height: auto;}
+.apoint { display: inline-block; width: 100%; border-bottom: 1px solid #ccc; font-size: 12px; margin-bottom: 5px;  padding-bottom: 5px; font-family: "GothamRoundedMedium"; line-height: 20px;color: #838381;}
+.apoint span.right { float: right;}
+
+
+/* ----- schedule-page ----- */
+
+.schedule-left{float: left; width: 70%; background: #F6F6F6; min-height: 710px;}
+.schedule-right{float: right; width: 30%; background: #E9E7EA; min-height: 710px;}
+.schedule-pnl{padding:20px;}
+.schedule-top{overflow:auto; margin-top:10px;}
+.schedule-top h3{float:left; font-size:15px; color: #878787; font-weight:normal;}
+
+
+.schedule-right .dark-bg{background:#9C9A9B; color:#fff; padding:5px 20px;}
+.appointments{margin:0; padding:0;}
+.appointments li{list-style:none; color: #878787; position:relative; padding:20px 25px;border-bottom:1px solid #B1B1B1;}
+.appointments h2{font-size:14px; font-weight:normal;}
+.appointments p{ font-family: 'GothamRoundedBook'; font-size:12px;}
+.appointments .details-link{color:#1D9DD8; font-family: 'GothamRoundedBook'; font-size:14px; text-decoration:none; position:absolute; right:10px; top:39%;}
+.appointments li:nth-child(even){background:#EEEEEE;}
+
+/* ----- schedule-page ----- */
+
+
+/* 27-november-2014 live-appointment-conclusion */
+.la-conclusn .c-left .col{width:48%;}
+.bdrTop0{border-top:0px !important;}
+.con-textarea{width:100%; min-height:80px; border:0px; resize:none; }
+.heading2{font-size: 15px; color: #878787; font-weight: normal; margin-bottom:20px;}
+.new-pescrip{ width:100%; max-height:525px; overflow:auto; padding:0 5px}
+.new-pescrip .strok-field{border:1px solid #B1B1B1;}
+.heading2.new-pescrip{margin:25px 0 0;}
+.prescrp-list{margin:0; padding:0;}
+.prescrp-list li{list-style:none; padding:12px 0; border-bottom:1px solid #B1B1B1; font-size:14px; color: #878787; position:relative;}
+.prescrp-list .cancel{position:absolute; right:0; top:14px; width:13px; height:13px; background:url(../images/cancel.png) no-repeat left top; text-decoration:none; background-size: 100%;}
+.prescrp-list .delete{position:absolute; right:0; top:14px; width:16px; height:16px; background:url(../images/delete.png) no-repeat left top; text-decoration:none; background-size: 100%;}
+.heading3{font-size: 15px; color: #878787; font-weight: normal; margin-bottom:20px; background: #EEEEEE; margin-left:-15px; margin-right:-15px; padding:15px; border-top: 1px solid #B1B1B1; border-bottom: 1px solid #B1B1B1;}
+.prescip-sec{float:left; width:100%; margin-bottom:10px}
+.prescip-sec:not(:first-child){margin-top:30px;}
+.prescip-sec .btn-sec{margin-top:12px;}
+.prescip-sec .btn-sec .buttons{border-radius: 3px; background: #B1B1B1; color: #fff; font-size: 16px; text-decoration: none;padding: 6px 10px; display:inline-block; border:0px; text-decoration:none; margin-right:5px; cursor:pointer;}
+.prescip-sec .main-btn{text-align:center; margin-top:30px;}
+.prescip-sec .main-btn .buttons{padding: 8px 10px;}
+
+/* 27-november-2014 live-appointment-conclusion */
+
+
+/* schedule-page popup */
+.clear{clear:both; height:0px;}
+.mrgR0{margin-right:0px !important;}
+.contant-area{position:relative;}
+.popup-otr{ position:absolute; top:24px; left:0; bottom:0; width:100%; z-index:9; display:none}
+.p-overlay {position:absolute; background:#fff; opacity:.9; left:0; width:100%; top:0; bottom:0;}
+.p-con{position:absolute; width:1030px; top:70px; left:50%; margin-left:-515px;}
+.p-con-box{}
+.p-con .cancel-btn{text-decoration:none; position:absolute; right:30px; top:20px; background:url(../images/close.png) no-repeat left top; width:31px; height:31px; display:block;}
+.schedule-pop-box{padding:30px; border: 1px solid #D6D6D6; border-radius:5px; background:#E8E8EA; min-height:400px;}
+.schedule-pop-box .head-con{ padding-bottom:20px; border-bottom:2px solid #B1B1B1; margin-bottom:20px;}
+.checked-icon{position:relative; top:2px;}
+.schedule-pop-con .col{width: 307px; border: 1px solid #D6D6D6; background: #fff; border-radius: 3px; margin-right:20px;}
+.minHgt .content-section{min-height: 143px;}
+.diagno-lst{}
+.diagno-lst li{float:left; width:100%; border:0 !important; padding:0 !important; font-size: 16px !important; margin-bottom: 3px;}
+.diagno-lst li div{float:left; width:50%; }
+.diagno-lst li div.right{float:right; text-align:right;}
+
+/* patient-profile */
+.patient-profile{padding: 50px 5% 0; width: 90%;}
+.patient-profile .profile-detail{float:left; margin-left:40px; margin-top: 40px;}
+.patient-profile .profile-photo{width:184px; height:184px; border-radius:50%; overflow:hidden;}
+.pd-page li{border:0px; text-align:left; font-family: 'GothamRoundedBook';}
+.content-sec-otr{margin-top:50px; width:100%; margin-bottom:30px;}
+.content-sec-otr .col{margin-right:20px; width: 324px;}
+.appoint-histry{}
+.appoint-histry li{ padding-bottom:10px !important; border-bottom:1px solid #E6E6E6 !important; margin-bottom:0px !important; font-family: 'GothamRoundedBook' !important;}
+.appoint-histry li:first-child{padding-top:0px !important;}
+.appoint-histry li:first-child h4{margin-top:0px;}
+.appoint-histry li:last-child{margin-bottom:0px !important; padding-bottom:0px !important; border-bottom:0px !important;}
+.appoint-histry h4{ position:relative; font-weight:normal; margin-top:8px; color: #888888;}
+.appoint-histry p{ margin-top:3px; font-family: 'GothamRoundedBook' !important; padding-bottom:0px !important;}
+.appoint-histry .date{position:absolute; right:0; top:0;}
+/* patient-profile */
+
+.calendar-page-outer-con, .profile-page-outer-con{ background:#e9e7ea; width:100%; float:left}
+.calendar-page-outer-con .schedule-right{ overflow:auto}
+
+.loading{background:url(../images/ajax-loader.gif) no-repeat right center;}
+
+ul.ui-autocomplete li { font-size:15px; }
+ul.ui-autocomplete li:nth-child(odd) { background: #E9E7EA; }
+
+/*10-12-14 login */
+
+.login-sec { background: #f7f6f6;}
+.container-login {    margin: 150px auto 0px;width: 530px;}
+.login {background:#fff;border: 1px solid rgb(221, 221, 221);border-radius: 5px;    padding: 20px;}
+.login span {    clear: both;    display: block;    text-align: center;}
+.login span input {border: 1px solid rgb(221, 221, 221);border-radius: 5px;color:#b1b1b1;font-size: 17px;height: 50px;margin-bottom: 20px;padding: 0 9px;    width: 350px;}
+input.log-btn {background: none repeat scroll 0 0 rgb(177, 177, 177); border: medium none;border-radius: 3px;color: rgb(255, 255, 255) !important;font-size: 19px;height: 45px;width: 130px;margin-bottom:10px;font-family:"GothamRoundedBook";}
+.login span a {color: rgb(177, 177, 177);font-family: "GothamRoundedMedium";font-size: 14px;font-weight: normal;text-decoration: none;text-transform: capitalize;}
+.logo-img {width: 200px; margin:40px auto;}
+.logo-img img{width:100%;}
+
+.top-nevigation .active { background: none repeat scroll 0 0 #0088C7;}
+.shift-appointment .notification { height: 28px;    line-height: 28px;    padding: 0px; width:100%;}
+.appoint-date { float: left;    width: 300px; padding-left: 40px;}
+.appoint-time {    padding-left: 10px;}
+.shift-appointment .notification .f-right {background: none repeat scroll 0 0 #9b9b9b;    height: 28px;    padding: 0 1%;}
+.shift-table-cont{border: 1px solid #cccccc;border-radius: 4px; width:100%; overflow: hidden;}
+table.shift-shedule { border-collapse: collapse; width: 100%; background:none repeat scroll 0 0 #ffffff;}
+table.shift-shedule thead {background: none repeat scroll 0 0 #D7D7D7;color: #ffffff;font-weight: normal;height:50px; line-height: 50px;}
+table.shift-shedule th { border-right: 1px solid #f5f5f5;  font-size: 17px; text-transform:capitalize; font-weight: normal; width: 21%;}
+table.shift-shedule th:last-child { border: medium none;}
+table.shift-shedule tbody tr {border-top: 1px solid #D7D7D7;height: 40px;    line-height: 40px;    text-align: center;}
+table.shift-shedule td { border-right: 1px solid #d7d7d7;width: 20%;font-family: "GothamRoundedBook";color: #888; font-size: 16px;font-weight: normal;}
+table.shift-shedule td:last-child {  border: medium none; }
+.shift-shedule input[type="checkbox"] {border: 1px solid #ccc;    height: 15px;    width: 15px;-webkit-appearance: scalethumbend !important; -moz-appearance:scalethumbend !important;}
+.appointment-info {    padding: 0;    width: 30%;   min-height: 720px; position:relative;}
+.appointment-ul {    list-style: outside none none; margin: 0;    padding: 0;}
+.appointment-ul > li {  border-bottom: 1px solid #AFAFAF;color: #888;font-size: 13px;font-weight: normal;padding: 27px 5%;
+    width: 90%;}
+b.date {color: #888;font-size: 16px;font-weight: 500; margin: 0 29px;}
+.time {font-size: 16px; font-family:"GothamRoundedBook";}
+.confirm {text-align: center;   width: 100%; margin:20px 0 0 0}
+.confirm .done-button { float: none;}
+td input[type="checkbox"]{display:none;}
+.appointment-ul li input[type="checkbox"]{display:none;}
+td input[type="checkbox"] + label span{ background:url("../images/checkbox.png")no-repeat scroll 0px 0px;
+    cursor: pointer;    display: inline-block;    height: 13px;    margin: -1px 14px 0 0;    vertical-align: middle;
+    width: 13px;}
+.appointment-ul li input[type="checkbox"] + label span{ background: none repeat scroll 0 0 #ffffff;border: 1px solid #d7d7d7;
+    border-radius: 3px;cursor: pointer; display: inline-block;height: 12px; margin: -1px 14px 0 0;    vertical-align: middle; width: 12px;}
+td input[type="checkbox"]:checked + label span { background:url("../images/checked.png")no-repeat scroll 0px 0px;}
+
+.appointment-ul li input[type="checkbox"]:checked + label span { background:url("../images/checked.png")no-repeat scroll 0px 0px;}
+
+.icon_calendar {float:right; color:#0088C7; margin-right:25px;}
+
+.ui-tooltip, .arrow:after {
+    background: #f0f0f0;
+    border: 2px solid white;
+}
+.ui-tooltip {
+    padding: 10px 20px;
+    color: #9C9A9B;
+    border-radius: 20px;
+    font: bold 14px "Helvetica Neue", Sans-Serif;
+    text-transform: uppercase;
+    box-shadow: 0 0 7px black;
+}
+.arrow {
+width: 70px;
+height: 16px;
+overflow: hidden;
+position: absolute;
+left: 50%;
+margin-left: -35px;
+bottom: -16px;
+}
+.arrow.top {
+top: -16px;
+bottom: auto;
+}
+.arrow.left {
+left: 20%;
+}
+.arrow:after {
+content: "";
+position: absolute;
+left: 20px;
+top: -20px;
+width: 25px;
+height: 25px;
+box-shadow: 6px 5px 9px -9px black;
+-webkit-transform: rotate(45deg);
+-ms-transform: rotate(45deg);
+transform: rotate(45deg);
+}
+.arrow.top:after {bottom: -20px;top: auto;}
+
+i.fa-edit, i.fa-check {cursor:pointer}
+
+textarea.notes{height:80px}
+
+.bio-section textarea{width: 90%; resize: none; border: thin solid rgb(240, 240, 240); padding: 10px;}
+.bio-section.sign > img { width: 100%}
+
+.selected_date_calendar{background: #DCE7EC}
+
+/***live appontment-- 05-01-2014***/
+
+.live-app-sec {
+    box-sizing: border-box;
+    float: left;
+    padding: 15px 0 40px 0;
+    width: 70%;
+}
+.details{position:relative;}
+.chk-appoint {bottom: -2px;position: absolute;right: -6px;}
+.details input[type="checkbox"] {    display: none;}
+.details input[type="checkbox"]:checked + label span {background: url("../images/checked.png") no-repeat scroll 0 0 rgba(0, 0, 0, 0);}
+.details input[type="checkbox"] + label span {background: url("../images/checkbox.png") no-repeat scroll 0 0 rgba(0, 0, 0, 0);
+    cursor: pointer;display: inline-block;height: 13px;margin: -1px 14px 0 0;vertical-align: middle;width: 13px;}
+.arw-dwn {color:#b1b1b1; float:right}
+.appoint-sec {float: left;width: 42%;padding-right:20px;-webkit-box-sizing: border-box; -moz-box-sizing: border-box;   box-sizing: border-box}
+.live-app-sec .middle-col{width:58%;-webkit-box-sizing: border-box; -moz-box-sizing: border-box;   box-sizing: border-box}
+.appoint-sec .col {margin-bottom: 15px;width: 100%;}
+.user-img-sec{position: relative;top: -60px;width: 100%;}
+.image-sec figure{width:100%;height:auto;border:none;}
+.user-img-sec .buttons-sec button.end-call{padding:20px 15px;font-size: 15px;}
+.user-img-sec .buttons-sec button.cam{height:60px;}
+.app-rght .prescip-sec {}
+.app-rght .heading2.new-pescrip {padding: 0 20px;}
+.app-rght .form-section {box-sizing: border-box;float: left;padding: 10px 20px;width: 100%;}
+.app-rght .new-pescrip .strok-field {box-sizing: border-box;height: 40px;width: 100%;}
+.app-rght .heading3{padding:15px 30px;}
+.app-rght .form-sec {}
+.form-sec input, .form-sec select {font-family: 'GothamRoundedBook'; border-radius:3px; border: medium none;color: #949494; font-size: 13px; height: 35px; margin-bottom: 12px;padding: 0 0 0 12px; width: 100%;}
+.form-sec select {background: #fff;}
+.c-right.app-rght {min-height: 800px;}
+/**end**/
+
+/**Appointment more info**/
+.arw-up {background: url("../images/arw-dwn.png") no-repeat scroll right center / 11px auto rgba(0, 0, 0, 0);float: right;height: 10px;width: 20px;}
+.more-info-cont section .heading {background: none repeat scroll 0 0 #ffffff;}
+.more-info-cont .content-section {background: none repeat scroll 0 0 #f6f6f6;}
+.more_info_toogle{cursor:pointer}
+
+/**end**/
+
+.list2 input {width: 80px; border-radius: 5px; margin: 0px 8px 0px 0px; border: thin solid #B1B1B1;}
+
+.loader {
+    position: fixed;
+    left: 0px;
+    top: 0px;
+    width: 100%;
+    height: 100%;
+    z-index: 9999;
+    background: url('../images/page-loader.gif') 50% 50% no-repeat rgb(249,249,249);
+}
+
+.alertify,
+.alertify-show,
+.alertify-log {
+    -webkit-transition: all 500ms cubic-bezier(0.175, 0.885, 0.320, 1.275);
+       -moz-transition: all 500ms cubic-bezier(0.175, 0.885, 0.320, 1.275);
+        -ms-transition: all 500ms cubic-bezier(0.175, 0.885, 0.320, 1.275);
+         -o-transition: all 500ms cubic-bezier(0.175, 0.885, 0.320, 1.275);
+            transition: all 500ms cubic-bezier(0.175, 0.885, 0.320, 1.275); /* easeOutBack */
+}
+.alertify-hide {
+    -webkit-transition: all 250ms cubic-bezier(0.600, -0.280, 0.735, 0.045);
+       -moz-transition: all 250ms cubic-bezier(0.600, -0.280, 0.735, 0.045);
+        -ms-transition: all 250ms cubic-bezier(0.600, -0.280, 0.735, 0.045);
+         -o-transition: all 250ms cubic-bezier(0.600, -0.280, 0.735, 0.045);
+            transition: all 250ms cubic-bezier(0.600, -0.280, 0.735, 0.045); /* easeInBack */
+}
+.alertify-log-hide {
+    -webkit-transition: all 500ms cubic-bezier(0.600, -0.280, 0.735, 0.045);
+       -moz-transition: all 500ms cubic-bezier(0.600, -0.280, 0.735, 0.045);
+        -ms-transition: all 500ms cubic-bezier(0.600, -0.280, 0.735, 0.045);
+         -o-transition: all 500ms cubic-bezier(0.600, -0.280, 0.735, 0.045);
+            transition: all 500ms cubic-bezier(0.600, -0.280, 0.735, 0.045); /* easeInBack */
+}
+.alertify-cover {
+    position: fixed; z-index: 99999;
+    top: 0; right: 0; bottom: 0; left: 0;
+    background-color:white;
+    filter:alpha(opacity=0);
+    opacity:0;
+}
+    .alertify-cover-hidden {
+        display: none;
+    }
+.alertify {
+    position: fixed; z-index: 99999;
+    top: 50px; left: 50%;
+    width: 550px;
+    margin-left: -275px;
+    opacity: 1;
+}
+    .alertify-hidden {
+        -webkit-transform: translate(0,-150px);
+           -moz-transform: translate(0,-150px);
+            -ms-transform: translate(0,-150px);
+             -o-transform: translate(0,-150px);
+                transform: translate(0,-150px);
+        opacity: 0;
+        display: none;
+    }
+    /* overwrite display: none; for everything except IE6-8 */
+    :root *> .alertify-hidden {
+        display: block;
+        visibility: hidden;
+    }
+.alertify-logs {
+    position: fixed;
+    z-index: 5000;
+    bottom: 10px;
+    right: 10px;
+    width: 300px;
+}
+.alertify-logs-hidden {
+    display: none;
+}
+    .alertify-log {
+        display: block;
+        margin-top: 10px;
+        position: relative;
+        right: -300px;
+        opacity: 0;
+    }
+    .alertify-log-show {
+        right: 0;
+        opacity: 1;
+    }
+    .alertify-log-hide {
+        -webkit-transform: translate(300px, 0);
+           -moz-transform: translate(300px, 0);
+            -ms-transform: translate(300px, 0);
+             -o-transform: translate(300px, 0);
+                transform: translate(300px, 0);
+        opacity: 0;
+    }
+    .alertify-dialog {
+        padding: 25px;
+    }
+        .alertify-resetFocus {
+            border: 0;
+            clip: rect(0 0 0 0);
+            height: 1px;
+            margin: -1px;
+            overflow: hidden;
+            padding: 0;
+            position: absolute;
+            width: 1px;
+        }
+        .alertify-inner {
+            text-align: center;
+        }
+        .alertify-text {
+            margin-bottom: 15px;
+            width: 100%;
+            -webkit-box-sizing: border-box;
+               -moz-box-sizing: border-box;
+                    box-sizing: border-box;
+            font-size: 100%;
+        }
+        .alertify-buttons {
+        }
+            .alertify-button,
+            .alertify-button:hover,
+            .alertify-button:active,
+            .alertify-button:visited {
+                background: none;
+                text-decoration: none;
+                border: none;
+                /* line-height and font-size for input button */
+                line-height: 1.5;
+                font-size: 100%;
+                display: inline-block;
+                cursor: pointer;
+                margin-left: 5px;
+            }
+
+@media only screen and (max-width: 680px) {
+    .alertify,
+    .alertify-logs {
+        width: 90%;
+        -webkit-box-sizing: border-box;
+           -moz-box-sizing: border-box;
+                box-sizing: border-box;
+    }
+    .alertify {
+        left: 5%;
+        margin: 0;
+    }
+}
+
+/**
+ * Twitter Bootstrap Look and Feel
+ * Based on http://twitter.github.com/bootstrap/
+ */
+.alertify,
+.alertify-log {
+    font-family: sans-serif;
+}
+.alertify {
+    background: #FFF;
+    border: 1px solid #8E8E8E; /* browsers that don't support rgba */
+    border: 1px solid rgba(0,0,0,.3);
+    border-radius: 6px;
+    box-shadow: 0 3px 7px rgba(0,0,0,.3);
+    -webkit-background-clip: padding;     /* Safari 4? Chrome 6? */
+       -moz-background-clip: padding;     /* Firefox 3.6 */
+            background-clip: padding-box; /* Firefox 4, Safari 5, Opera 10, IE 9 */
+}
+.alertify-dialog {
+    padding: 0;
+}
+    .alertify-inner {
+        text-align: left;
+    }
+        .alertify-message {
+            padding: 15px;
+            margin: 0;
+        }
+        .alertify-text-wrapper {
+            padding: 0 15px;
+        }
+            .alertify-text {
+                color: #555;
+                border-radius: 4px;
+                padding: 8px;
+                background-color: #FFF;
+                border: 1px solid #CCC;
+                box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+            }
+            .alertify-text:focus {
+                border-color: rgba(82,168,236,.8);
+                outline: 0;
+                box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(82,168,236,.6);
+            }
+
+        .alertify-buttons {
+            padding: 14px 15px 15px;
+            background: #F5F5F5;
+            border-top: 1px solid #DDD;
+            border-radius: 0 0 6px 6px;
+            box-shadow: inset 0 1px 0 #FFF;
+            text-align: right;
+        }
+            .alertify-button,
+            .alertify-button:hover,
+            .alertify-button:focus,
+            .alertify-button:active {
+                margin-left: 10px;
+                border-radius: 4px;
+                font-weight: normal;
+                padding: 4px 12px;
+                text-decoration: none;
+                box-shadow: inset 0 1px 0 rgba(255, 255, 255, .2), 0 1px 2px rgba(0, 0, 0, .05);
+                background-image: -webkit-linear-gradient(top, rgba(255,255,255,.3), rgba(255,255,255,0));
+                background-image:    -moz-linear-gradient(top, rgba(255,255,255,.3), rgba(255,255,255,0));
+                background-image:     -ms-linear-gradient(top, rgba(255,255,255,.3), rgba(255,255,255,0));
+                background-image:      -o-linear-gradient(top, rgba(255,255,255,.3), rgba(255,255,255,0));
+                background-image:         linear-gradient(top, rgba(255,255,255,.3), rgba(255,255,255,0));
+            }
+            .alertify-button:focus {
+                outline: none;
+                box-shadow: 0 0 5px #2B72D5;
+            }
+            .alertify-button:active {
+                position: relative;
+                box-shadow: inset 0 2px 4px rgba(0,0,0,.15), 0 1px 2px rgba(0,0,0,.05);
+            }
+                .alertify-button-cancel,
+                .alertify-button-cancel:hover,
+                .alertify-button-cancel:focus,
+                .alertify-button-cancel:active {
+                    text-shadow: 0 -1px 0 rgba(255,255,255,.75);
+                    background-color: #E6E6E6;
+                    border: 1px solid #BBB;
+                    color: #333;
+                    background-image: -webkit-linear-gradient(top, #FFF, #E6E6E6);
+                    background-image:    -moz-linear-gradient(top, #FFF, #E6E6E6);
+                    background-image:     -ms-linear-gradient(top, #FFF, #E6E6E6);
+                    background-image:      -o-linear-gradient(top, #FFF, #E6E6E6);
+                    background-image:         linear-gradient(top, #FFF, #E6E6E6);
+                }
+                .alertify-button-cancel:hover,
+                .alertify-button-cancel:focus,
+                .alertify-button-cancel:active {
+                    background: #E6E6E6;
+                }
+                .alertify-button-ok,
+                .alertify-button-ok:hover,
+                .alertify-button-ok:focus,
+                .alertify-button-ok:active {
+                    text-shadow: 0 -1px 0 rgba(0,0,0,.25);
+                    background-color: #04C;
+                    border: 1px solid #04C;
+                    border-color: #04C #04C #002A80;
+                    border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
+                    color: #FFF;
+                }
+                .alertify-button-ok:hover,
+                .alertify-button-ok:focus,
+                .alertify-button-ok:active {
+                    background: #04C;
+                }
+
+.alertify-log {
+    background: #D9EDF7;
+    padding: 8px 14px;
+    border-radius: 4px;
+    color: #3A8ABF;
+    text-shadow: 0 1px 0 rgba(255,255,255,.5);
+    border: 1px solid #BCE8F1;
+}
+    .alertify-log-error {
+        color: #B94A48;
+        background: #F2DEDE;
+        border: 1px solid #EED3D7;
+    }
+    .alertify-log-success {
+        color: #468847;
+        background: #DFF0D8;
+        border: 1px solid #D6E9C6;
+    }
+.flash_message{ background: none repeat scroll 0 0 #efefef; border: thin solid #911b1b; border-radius: 12px; color: #911b1b; font-size: 15px; font-weight: bold; padding: 6px; text-align: center; margin:5px}
+.buttons-sec button.start-call:disabled {background:#c3c3c3}
+
+.no_app_full_sec {text-align: center; color: #0BDA81;font-family: gothamroundedbook;font-weight: bold; font-size: 22px;}
+.no_app_full_sec .mid_cont {margin: 100px auto; width: 40%; border: thin solid #D8D8D8; padding: 15px;}
+
+.profile-photo .fa.fa-camera { position: relative; color: #239DDD; right: -60px; top: 45px; cursor:pointer}
+
+.fa-eye { color:#1d9dd8; padding:0 10px}
+
+#snapshots_images > img { margin:2px 2px 0 0; width:18%;}
+span#appointment_call_alert{ display:none;}
